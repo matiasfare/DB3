@@ -555,13 +555,13 @@
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>Merge join 2</from>
-      <to>Peliculas Table output</to>
+      <from>payment</from>
+      <to>Merge join 2</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>payment</from>
-      <to>Merge join 2</to>
+      <from>Merge join 2</from>
+      <to>Insert / update</to>
       <enabled>Y</enabled>
     </hop>
   </order>
@@ -595,7 +595,7 @@
     </remotesteps>
     <GUI>
       <xloc>272</xloc>
-      <yloc>64</yloc>
+      <yloc>144</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -603,7 +603,7 @@
     <name>Merge join 2</name>
     <type>MergeJoin</type>
     <description />
-    <distribute>Y</distribute>
+    <distribute>N</distribute>
     <custom_distribution />
     <copies>1</copies>
     <partitioning>
@@ -629,75 +629,7 @@
     </remotesteps>
     <GUI>
       <xloc>416</xloc>
-      <yloc>64</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>Peliculas Table output</name>
-    <type>TableOutput</type>
-    <description />
-    <distribute>Y</distribute>
-    <custom_distribution />
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name />
-    </partitioning>
-    <connection>dvdrental_destino</connection>
-    <schema>public</schema>
-    <table>film</table>
-    <commit>10</commit>
-    <truncate>N</truncate>
-    <ignore_errors>N</ignore_errors>
-    <use_batch>Y</use_batch>
-    <specify_fields>Y</specify_fields>
-    <partitioning_enabled>N</partitioning_enabled>
-    <partitioning_field />
-    <partitioning_daily>N</partitioning_daily>
-    <partitioning_monthly>Y</partitioning_monthly>
-    <tablename_in_field>N</tablename_in_field>
-    <tablename_field />
-    <tablename_in_table>Y</tablename_in_table>
-    <return_keys>N</return_keys>
-    <return_field />
-    <fields>
-      <field>
-        <column_name>id</column_name>
-        <stream_name>film_id</stream_name>
-      </field>
-      <field>
-        <column_name>titulo</column_name>
-        <stream_name>title</stream_name>
-      </field>
-      <field>
-        <column_name>duracion_film</column_name>
-        <stream_name>length</stream_name>
-      </field>
-      <field>
-        <column_name>lenguaje</column_name>
-        <stream_name>name</stream_name>
-      </field>
-      <field>
-        <column_name>max_renta</column_name>
-        <stream_name>rental_duration</stream_name>
-      </field>
-      <field>
-        <column_name>precio_renta</column_name>
-        <stream_name>amount</stream_name>
-      </field>
-    </fields>
-    <attributes />
-    <cluster_schema />
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>560</xloc>
-      <yloc>64</yloc>
+      <yloc>144</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -729,7 +661,7 @@
     </remotesteps>
     <GUI>
       <xloc>80</xloc>
-      <yloc>16</yloc>
+      <yloc>144</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -760,8 +692,8 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>80</xloc>
-      <yloc>112</yloc>
+      <xloc>272</xloc>
+      <yloc>16</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -797,8 +729,76 @@ join payment pa on pa.rental_id=r.rental_id;</sql>
       </output>
     </remotesteps>
     <GUI>
-      <xloc>160</xloc>
-      <yloc>224</yloc>
+      <xloc>416</xloc>
+      <yloc>16</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Insert / update</name>
+    <type>InsertUpdate</type>
+    <description />
+    <distribute>Y</distribute>
+    <custom_distribution />
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name />
+    </partitioning>
+    <connection>dvdrental_destino</connection>
+    <commit>100</commit>
+    <update_bypassed>N</update_bypassed>
+    <lookup>
+      <schema>public</schema>
+      <table>film</table>
+      <key>
+        <name>film_id</name>
+        <field>id</field>
+        <condition>=</condition>
+        <name2 />
+      </key>
+      <value>
+        <name>id</name>
+        <rename>film_id</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>titulo</name>
+        <rename>title</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>duracion_film</name>
+        <rename>length</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>lenguaje</name>
+        <rename>name</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>precio_renta</name>
+        <rename>amount</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>max_renta</name>
+        <rename>rental_duration</rename>
+        <update>Y</update>
+      </value>
+    </lookup>
+    <attributes />
+    <cluster_schema />
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>560</xloc>
+      <yloc>144</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
