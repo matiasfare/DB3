@@ -563,18 +563,23 @@
     <fields>
       <field>
         <name>id</name>
+        <rename />
       </field>
       <field>
         <name>anho</name>
+        <rename />
       </field>
       <field>
         <name>mes</name>
+        <rename />
       </field>
       <field>
         <name>dia</name>
+        <rename />
       </field>
       <field>
         <name>semestre</name>
+        <rename />
       </field>
       <select_unspecified>N</select_unspecified>
       <meta>
@@ -582,7 +587,7 @@
         <rename>anho</rename>
         <type>String</type>
         <length>-2</length>
-        <precision>-2</precision>
+        <precision>0</precision>
         <conversion_mask />
         <date_format_lenient>false</date_format_lenient>
         <date_format_locale />
@@ -599,7 +604,7 @@
         <rename>mes</rename>
         <type>String</type>
         <length>-2</length>
-        <precision>-2</precision>
+        <precision>0</precision>
         <conversion_mask />
         <date_format_lenient>false</date_format_lenient>
         <date_format_locale />
@@ -616,7 +621,7 @@
         <rename>dia</rename>
         <type>String</type>
         <length>-2</length>
-        <precision>-2</precision>
+        <precision>0</precision>
         <conversion_mask />
         <date_format_lenient>false</date_format_lenient>
         <date_format_locale />
@@ -632,7 +637,7 @@
         <name>semestre</name>
         <rename>semestre</rename>
         <type>String</type>
-        <length>9</length>
+        <length>-2</length>
         <precision>0</precision>
         <conversion_mask />
         <date_format_lenient>false</date_format_lenient>
@@ -674,9 +679,9 @@
     <connection>dvdrental_OG</connection>
     <sql>select 
 payment_id as "id",
-extract(year from payment_date) as "anho",
-extract(month from payment_date) as "mes",
-extract(day from payment_date) as "dia",
+(extract(year from payment_date)::integer) as "anho",
+(extract(month from payment_date)::integer) as "mes",
+(extract(day from payment_date)::integer) as "dia",
 case when extract(month from payment_date) &lt; 7 then 1 else 2 end as "semestre"
 from payment</sql>
     <limit>0</limit>
@@ -713,7 +718,7 @@ from payment</sql>
     <commit>100</commit>
     <update_bypassed>N</update_bypassed>
     <lookup>
-      <schema />
+      <schema>public</schema>
       <table>tiempo</table>
       <key>
         <name>id</name>
@@ -721,35 +726,6 @@ from payment</sql>
         <condition>=</condition>
         <name2 />
       </key>
-      <key>
-        <name>anho</name>
-        <field>anho</field>
-        <condition>=</condition>
-        <name2 />
-      </key>
-      <key>
-        <name>mes</name>
-        <field>mes</field>
-        <condition>=</condition>
-        <name2 />
-      </key>
-      <key>
-        <name>dia</name>
-        <field>dia</field>
-        <condition>=</condition>
-        <name2 />
-      </key>
-      <key>
-        <name>semestre</name>
-        <field>semestre</field>
-        <condition>=</condition>
-        <name2 />
-      </key>
-      <value>
-        <name>id</name>
-        <rename>id</rename>
-        <update>Y</update>
-      </value>
       <value>
         <name>anho</name>
         <rename>anho</rename>
