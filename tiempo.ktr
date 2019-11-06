@@ -660,7 +660,7 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>256</xloc>
+      <xloc>272</xloc>
       <yloc>80</yloc>
       <draw>Y</draw>
     </GUI>
@@ -677,13 +677,13 @@
       <schema_name />
     </partitioning>
     <connection>dvdrental_OG</connection>
-    <sql>select 
-payment_id as "id",
-(extract(year from payment_date)::integer) as "anho",
-(extract(month from payment_date)::integer) as "mes",
-(extract(day from payment_date)::integer) as "dia",
-case when extract(month from payment_date) &lt; 7 then 1 else 2 end as "semestre"
-from payment</sql>
+    <sql>select distinct to_char(date_trunc('day', rental_date), 'YYYY-MM-DD') as "id",
+(extract(year from rental_date)::integer) as "anho",
+(extract(month from rental_date)::integer) as "mes",
+(extract(day from rental_date)::integer) as "dia",
+case when extract(month from rental_date) &lt; 7 then 1 else 2 end as "semestre"
+from rental
+where rental_date is not null</sql>
     <limit>0</limit>
     <lookup />
     <execute_each_row>N</execute_each_row>
@@ -744,6 +744,11 @@ from payment</sql>
       <value>
         <name>semestre</name>
         <rename>semestre</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>id</name>
+        <rename>id</rename>
         <update>Y</update>
       </value>
     </lookup>

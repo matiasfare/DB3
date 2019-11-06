@@ -556,31 +556,24 @@
       <schema_name />
     </partitioning>
     <connection>dvdrental_origen</connection>
-    <sql>select distinct f.film_id, c.category_id, a.actor_id, st.store_id, ct.city_id, p.payment_id
-from film f join film_category fc
-on f.film_id = fc.film_id
-join category c
-on fc.category_id = c.category_id
-join film_actor fa
-on fa.film_id = f.film_id
-join actor a
-on a.actor_id = fa.actor_id
-join inventory i
-on f.film_id = i.film_id
-join rental r
-on r.inventory_id = i.inventory_id
-join payment p
-on p.rental_id = r.rental_id
-join staff s
-on s.staff_id = p.staff_id
-join store st
-on st.store_id = s.store_id
-join address ad
-on ad.address_id = st.address_id
-join city ct
-on ct.city_id = ad.city_id
-join country cty
-on cty.country_id = ct.country_id</sql>
+    <sql>
+select coalesce(sum(pay.amount), 0) as monto_recaudado, count(r.rental_id) as cantidad_renta, f.film_id as film_id, c.category_id as category_id, s.store_id as store_id, to_char(
+date_trunc('day', r.rental_date), 'YYYY-MM-DD') as rental_date
+from film f
+	join film_category fc
+		on f.film_id = fc.film_id
+	join category c
+		on fc.category_id = c.category_id
+	join inventory i
+		on f.film_id = i.film_id
+	join rental r
+		on r.inventory_id = i.inventory_id
+	join staff s
+		on s.staff_id = r.staff_id
+	left join payment pay
+		on r.rental_id = pay.rental_id
+group by f.film_id, c.category_id, s.store_id, to_char(date_trunc('day', r.rental_date), 'YYYY-MM-DD')
+order by to_char(date_trunc('day', r.rental_date), 'YYYY-MM-DD');</sql>
     <limit>0</limit>
     <lookup />
     <execute_each_row>N</execute_each_row>
@@ -624,7 +617,7 @@ on cty.country_id = ct.country_id</sql>
         <name2 />
       </key>
       <key>
-        <name>payment_id</name>
+        <name>rental_date</name>
         <field>id_tiempo</field>
         <condition>=</condition>
         <name2 />
@@ -632,12 +625,6 @@ on cty.country_id = ct.country_id</sql>
       <key>
         <name>film_id</name>
         <field>id_film</field>
-        <condition>=</condition>
-        <name2 />
-      </key>
-      <key>
-        <name>actor_id</name>
-        <field>id_actor</field>
         <condition>=</condition>
         <name2 />
       </key>
@@ -658,18 +645,23 @@ on cty.country_id = ct.country_id</sql>
         <update>Y</update>
       </value>
       <value>
-        <name>id_actor</name>
-        <rename>actor_id</rename>
-        <update>Y</update>
-      </value>
-      <value>
         <name>id_tienda</name>
         <rename>store_id</rename>
         <update>Y</update>
       </value>
       <value>
         <name>id_tiempo</name>
-        <rename>payment_id</rename>
+        <rename>rental_date</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>cantidad_de_rentas</name>
+        <rename>cantidad_renta</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>monto_recaudado</name>
+        <rename>monto_recaudado</rename>
         <update>Y</update>
       </value>
     </lookup>
